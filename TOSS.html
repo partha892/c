@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toss Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 50px auto;
+            width: 80%;
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #result h2 {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cricket Toss Simulator</h1>
+        <div id="setup">
+            <label for="captain1">Captain 1:</label>
+            <input type="text" id="captain1" placeholder="Enter Captain 1 name">
+            
+            <label for="captain2">Captain 2:</label>
+            <input type="text" id="captain2" placeholder="Enter Captain 2 name">
+            
+            <label for="caller">Who Calls:</label>
+            <select id="caller">
+                <option value="captain1">Captain 1</option>
+                <option value="captain2">Captain 2</option>
+            </select>
+            
+            <label for="call">What is the Call:</label>
+            <select id="call">
+                <option value="heads">Heads</option>
+                <option value="tails">Tails</option>
+            </select>
+            
+            <button id="startToss">Start Toss</button>
+        </div>
+        
+        <div id="result" class="hidden">
+            <h2 id="tossResult"></h2>
+            <button id="restart">Restart</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('startToss').addEventListener('click', () => {
+            const captain1 = document.getElementById('captain1').value.trim();
+            const captain2 = document.getElementById('captain2').value.trim();
+            const caller = document.getElementById('caller').value;
+            const call = document.getElementById('call').value;
+
+            if (!captain1 || !captain2) {
+                alert("Please enter both captain names.");
+                return;
+            }
+
+            const callingCaptain = caller === "captain1" ? captain1 : captain2;
+            const otherCaptain = caller === "captain1" ? captain2 : captain1;
+
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('tossResult').textContent = "Tossing the coin...";
+
+            // Simulate a delay of 3 seconds for the toss
+            setTimeout(() => {
+                const tossResult = Math.random() < 0.5 ? "heads" : "tails";
+                const winner = tossResult === call ? callingCaptain : otherCaptain;
+
+                document.getElementById('tossResult').textContent = `
+                    Toss Result: ${tossResult.toUpperCase()} 
+                    | Called by: ${callingCaptain} (${call.toUpperCase()}) 
+                    | Winner: ${winner}
+                `;
+            }, 3000);
+        });
+
+        document.getElementById('restart').addEventListener('click', () => {
+            document.getElementById('captain1').value = '';
+            document.getElementById('captain2').value = '';
+            document.getElementById('caller').value = 'captain1';
+            document.getElementById('call').value = 'heads';
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('setup').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
